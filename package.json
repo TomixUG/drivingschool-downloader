@@ -4,6 +4,7 @@
   "license": "MIT",
   "scripts": {
     "start": "node src/index.js",
+    "deploy": "node src/index.js && ./deploy.sh",
     "lint": "eslint src"
   },
   "dependencies": {
