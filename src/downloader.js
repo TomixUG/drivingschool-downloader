@@ -2,7 +2,6 @@ const fs = require('fs')
 const path = require('path')
 const fsExtra = require('fs-extra')
 
-
 const { fetchLecture, fetchQuestion, fetchAsset } = require('./api')
 const { parseQuestionHtml, serialResolve } = require('./utils')
 
@@ -22,7 +21,7 @@ function downloadLecture(lecture, db) {
   const lectureDir = path.join(DATA_DIR, `${lecture.id}`)
 
   // add category entry
-  db.run(`INSERT INTO categories VALUES ('${lecture.id}', '${lecture.name}');`);
+  db.run(`INSERT INTO categories VALUES ('${lecture.id}', '${lecture.name}');`)
 
   if (fs.existsSync(lectureDir)) {
     fsExtra.removeSync(lectureDir)
@@ -48,16 +47,20 @@ function downloadLecture(lecture, db) {
           return serialResolve(assetPromiseFactories).then((assets) => {
             // save the question and answer
             // adding the lecture.id to make it unique, there can be the same qeuestion in different category
-            let filePath = assets.length === 0 ? null : `'${assets[0].filename}'`; // if there is no image write null
+            let filePath = assets.length === 0 ? null : `'${assets[0].filename}'` // if there is no image write null
 
-            let questionCode = question.Code === "" ? id : question.Code; // rarely the questionCode isn't there so we jsut use the normal id
-            db.run(`INSERT INTO questions VALUES ('${questionCode}${lecture.id}', '${text}', ${filePath}, '${lecture.id}');`);
+            let questionCode = question.Code === '' ? id : question.Code // rarely the questionCode isn't there so we jsut use the normal id
+            db.run(
+              `INSERT INTO questions VALUES ('${questionCode}${lecture.id}', '${text}', ${filePath}, '${lecture.id}');`
+            )
 
-            answers.forEach(function(answer) {
+            answers.forEach(function (answer) {
               // check if the current answer is in the correctAnswers array
-              let isCorrect = question.CorrectAnswers.includes(answer.id) ? 1 : 0;
-              db.run(`INSERT INTO answers VALUES ('${answer.id}${lecture.id}', '${answer.text}', ${isCorrect}, '${questionCode}${lecture.id}');`);
-            });
+              let isCorrect = question.CorrectAnswers.includes(answer.id) ? 1 : 0
+              db.run(
+                `INSERT INTO answers VALUES ('${answer.id}${lecture.id}', '${answer.text}', ${isCorrect}, '${questionCode}${lecture.id}');`
+              )
+            })
 
             return {
               id,
@@ -66,7 +69,7 @@ function downloadLecture(lecture, db) {
               correctAnswers: question.CorrectAnswers,
               answers,
               assets
-            };
+            }
           })
         })
     })

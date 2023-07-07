@@ -4,8 +4,8 @@ const { lectures } = require('./lectures')
 const { downloadLecture } = require('./downloader')
 const { serialResolve } = require('./utils')
 
-var sqlite3 = require('sqlite3');
-var db = new sqlite3.Database('data.db');
+var sqlite3 = require('sqlite3')
+var db = new sqlite3.Database('data.db')
 
 // create tables
 db.run(`
@@ -13,7 +13,7 @@ db.run(`
       id TEXT PRIMARY KEY,
       name TEXT NOT NULL
   );
-`);
+`)
 
 // id is a questionCode
 db.run(`
@@ -24,7 +24,7 @@ db.run(`
       category_id TEXT NOT NULL,
       FOREIGN KEY (category_id) REFERENCES categories (id)
   );
-`);
+`)
 db.run(`
   CREATE TABLE answers (
       id TEXT PRIMARY KEY,
@@ -33,7 +33,7 @@ db.run(`
       question_id TEXT NOT NULL,
       FOREIGN KEY (question_id) REFERENCES questions (id)
   );
-`);
+`)
 
 inquirer
   .prompt([
@@ -48,7 +48,7 @@ inquirer
     }
   ])
   .then((results) => {
-    console.log(results);
+    console.log(results)
     const promiseFns = results.lectures.map((lecture) => () => downloadLecture(lecture, db))
     return serialResolve(promiseFns)
   })
