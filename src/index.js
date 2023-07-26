@@ -9,7 +9,7 @@ var db = new sqlite3.Database('data.db')
 
 // create tables
 db.run(`
-  CREATE TABLE categories (
+  CREATE TABLE IF NOT EXISTS categories (
       id TEXT PRIMARY KEY,
       name TEXT NOT NULL
   );
@@ -17,7 +17,7 @@ db.run(`
 
 // id is a questionCode
 db.run(`
-  CREATE TABLE questions (
+  CREATE TABLE IF NOT EXISTS questions (
       id TEXT PRIMARY KEY,
       text TEXT NOT NULL,
       image_url TEXT,
@@ -26,7 +26,7 @@ db.run(`
   );
 `)
 db.run(`
-  CREATE TABLE answers (
+  CREATE TABLE IF NOT EXISTS answers (
       id TEXT PRIMARY KEY,
       text TEXT NOT NULL,
       is_correct BOOLEAN NOT NULL,
@@ -48,7 +48,7 @@ inquirer
     }
   ])
   .then((results) => {
-    console.log(results)
+    // console.log(results)
     const promiseFns = results.lectures.map((lecture) => () => downloadLecture(lecture, db))
     return serialResolve(promiseFns)
   })

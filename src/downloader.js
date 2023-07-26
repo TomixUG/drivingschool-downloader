@@ -21,17 +21,28 @@ function downloadLecture(lecture, db) {
   const lectureDir = path.join(DATA_DIR, `${lecture.id}`)
 
   // add category entry
-  db.run(`INSERT INTO categories VALUES ('${lecture.id}', '${lecture.name}');`)
+  db.run(`INSERT or ignore INTO categories VALUES ('${lecture.id}', '${lecture.name}');`)
 
-  if (fs.existsSync(lectureDir)) {
-    fsExtra.removeSync(lectureDir)
+  if (!fs.existsSync(lectureDir)) {
+    fsExtra.ensureDirSync(lectureDir)
   }
-  fsExtra.ensureDirSync(lectureDir)
   return fetchLecture(lecture.id).then((res) => {
     console.log(`Downloading ${lecture.name}, questions: ${res.Questions.length}`)
     const questionPromises = res.Questions.map((question, i) => {
       const id = question.QuestionID
-      return () =>
+
+      let questionId = `${question.Code === '' ? id : question.Code}${lecture.id}` // rarely the questionCode isn't there so we jsut use the normal id
+
+      // TODO: should we fetch this question
+      db.all(`select id from questions where id='${questionId}'`, (err, rows) => {
+        // was question found?
+        if (rows.length > 0) {
+          console.log('question exists, skipping..')
+          return
+        }
+
+        console.log('question not found, downloading..')
+
         fetchQuestion(id).then((response) => {
           console.log(`[${i + 1}/${res.Questions.length}] Downloading Question ${i + 1}`)
           const { text, answers, imageUrls, videoUrl } = parseQuestionHtml(response)
@@ -49,16 +60,13 @@ function downloadLecture(lecture, db) {
             // adding the lecture.id to make it unique, there can be the same qeuestion in different category
             let filePath = assets.length === 0 ? null : `'${assets[0].filename}'` // if there is no image write null
 
-            let questionCode = question.Code === '' ? id : question.Code // rarely the questionCode isn't there so we jsut use the normal id
-            db.run(
-              `INSERT INTO questions VALUES ('${questionCode}${lecture.id}', '${text}', ${filePath}, '${lecture.id}');`
-            )
+            db.run(`INSERT or ignore INTO questions VALUES ('${questionId}', '${text}', ${filePath}, '${lecture.id}');`)
 
             answers.forEach(function (answer) {
               // check if the current answer is in the correctAnswers array
               let isCorrect = question.CorrectAnswers.includes(answer.id) ? 1 : 0
               db.run(
-                `INSERT INTO answers VALUES ('${answer.id}${lecture.id}', '${answer.text}', ${isCorrect}, '${questionCode}${lecture.id}');`
+                `INSERT or ignore INTO answers VALUES ('${answer.id}${lecture.id}', '${answer.text}', ${isCorrect}, '${questionId}');`
               )
             })
 
@@ -72,6 +80,7 @@ function downloadLecture(lecture, db) {
             }
           })
         })
+      })
     })
 
     return serialResolve(questionPromises).then((questions) => {
