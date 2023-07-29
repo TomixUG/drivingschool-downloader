@@ -33,54 +33,55 @@ function downloadLecture(lecture, db) {
 
       let questionId = `${question.Code === '' ? id : question.Code}${lecture.id}` // rarely the questionCode isn't there so we jsut use the normal id
 
-      // TODO: should we fetch this question
-      db.all(`select id from questions where id='${questionId}'`, (err, rows) => {
-        // was question found?
-        if (rows.length > 0) {
-          console.log('question exists, skipping..')
-          return
-        }
-
-        console.log('question not found, downloading..')
-
+      return () =>
         fetchQuestion(id).then((response) => {
-          console.log(`[${i + 1}/${res.Questions.length}] Downloading Question ${i + 1}`)
-          const { text, answers, imageUrls, videoUrl } = parseQuestionHtml(response)
-
-          const assetPromiseFactories = imageUrls.map(
-            (imageUrl, index) => () => downloadAsset(lectureDir, imageUrl, `${id}-${index + 1}`)
-          )
-
-          if (videoUrl) {
-            assetPromiseFactories.push(() => downloadAsset(lectureDir, videoUrl, `${id}-${imageUrls + 1}`))
-          }
-
-          return serialResolve(assetPromiseFactories).then((assets) => {
-            // save the question and answer
-            // adding the lecture.id to make it unique, there can be the same qeuestion in different category
-            let filePath = assets.length === 0 ? null : `'${assets[0].filename}'` // if there is no image write null
-
-            db.run(`INSERT or ignore INTO questions VALUES ('${questionId}', '${text}', ${filePath}, '${lecture.id}');`)
-
-            answers.forEach(function (answer) {
-              // check if the current answer is in the correctAnswers array
-              let isCorrect = question.CorrectAnswers.includes(answer.id) ? 1 : 0
-              db.run(
-                `INSERT or ignore INTO answers VALUES ('${answer.id}${lecture.id}', '${answer.text}', ${isCorrect}, '${questionId}');`
-              )
-            })
-
-            return {
-              id,
-              text,
-              code: question.Code,
-              correctAnswers: question.CorrectAnswers,
-              answers,
-              assets
+          // FIXME: this way is stupid, first check, then fetch
+          db.all(`select id from questions where id='${questionId}'`, (err, rows) => {
+            // was question found?
+            if (rows.length > 0) {
+              console.log(`[${i + 1}/${res.Questions.length}] question exists, skipping..`)
+              return
             }
+
+            console.log(`[${i + 1}/${res.Questions.length}] Downloading Question ${i + 1}`)
+            const { text, answers, imageUrls, videoUrl } = parseQuestionHtml(response)
+
+            const assetPromiseFactories = imageUrls.map(
+              (imageUrl, index) => () => downloadAsset(lectureDir, imageUrl, `${id}-${index + 1}`)
+            )
+
+            if (videoUrl) {
+              assetPromiseFactories.push(() => downloadAsset(lectureDir, videoUrl, `${id}-${imageUrls + 1}`))
+            }
+
+            return serialResolve(assetPromiseFactories).then((assets) => {
+              // save the question and answer
+              // adding the lecture.id to make it unique, there can be the same qeuestion in different category
+              let filePath = assets.length === 0 ? null : `'${assets[0].filename}'` // if there is no image write null
+
+              db.run(
+                `INSERT or ignore INTO questions VALUES ('${questionId}', '${text}', ${filePath}, '${lecture.id}');`
+              )
+
+              answers.forEach(function (answer) {
+                // check if the current answer is in the correctAnswers array
+                let isCorrect = question.CorrectAnswers.includes(answer.id) ? 1 : 0
+                db.run(
+                  `INSERT or ignore INTO answers VALUES ('${answer.id}${lecture.id}', '${answer.text}', ${isCorrect}, '${questionId}');`
+                )
+              })
+
+              return {
+                id,
+                text,
+                code: question.Code,
+                correctAnswers: question.CorrectAnswers,
+                answers,
+                assets
+              }
+            })
           })
         })
-      })
     })
 
     return serialResolve(questionPromises).then((questions) => {
