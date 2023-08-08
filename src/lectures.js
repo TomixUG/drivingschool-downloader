@@ -4,31 +4,31 @@ const lectures = [
     name: 'Pojmy, povinnosti',
     id: 24,
     points: 2,
-    type: ['all']
+    type: ['a', 'b', 'c', 'd'] // all
   },
   {
     name: 'Jízda vozidly',
     id: 16,
     points: 2,
-    type: ['all']
+    type: ['a', 'b', 'c', 'd'] // all
   },
   {
     name: 'Ostatní ustanovení',
     id: 25,
     points: 2,
-    type: ['all']
+    type: ['a', 'b', 'c', 'd'] // all
   },
   {
     name: 'Dopravní značky',
     id: 14,
     points: 1,
-    type: ['all']
+    type: ['a', 'b', 'c', 'd'] // all
   },
   {
     name: 'Řešení dopravních situací',
     id: 17,
     points: 4,
-    type: ['all']
+    type: ['a', 'b', 'c', 'd'] // all
   },
   {
     name: 'Zásady bezpečné jízdy [A]',
@@ -52,19 +52,19 @@ const lectures = [
     name: 'Související předpisy',
     id: 21,
     points: 2,
-    type: ['all']
+    type: ['a', 'b', 'c', 'd'] // all
   },
   {
     name: 'Podmínky provozu vozidel',
     id: 22,
     points: 1,
-    type: ['all']
+    type: ['a', 'b', 'c', 'd'] // all
   },
   {
     name: 'Zdravotnická příprava',
     id: 20,
     points: 1,
-    type: ['all']
+    type: ['a', 'b', 'c', 'd'] // all
   }
 ]
 

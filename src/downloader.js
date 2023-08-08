@@ -21,7 +21,12 @@ function downloadLecture(lecture, db) {
   const lectureDir = path.join(DATA_DIR, `${lecture.id}`)
 
   // add category entry
-  db.run(`INSERT or ignore INTO categories VALUES ('${lecture.id}', '${lecture.name}');`)
+  db.run(`INSERT or ignore INTO categories VALUES ('${lecture.id}', '${lecture.name}', '${lecture.points}');`)
+
+  // add category_types entry
+  lecture.type.forEach((t) => {
+    db.run(`INSERT or ignore INTO category_types (category_id, type_id) VALUES ('${lecture.id}', '${t}');`)
+  })
 
   if (!fs.existsSync(lectureDir)) {
     fsExtra.ensureDirSync(lectureDir)
