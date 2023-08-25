@@ -21,7 +21,9 @@ function downloadLecture(lecture, db) {
   const lectureDir = path.join(DATA_DIR, `${lecture.id}`)
 
   // add category entry
-  db.run(`INSERT or ignore INTO categories VALUES ('${lecture.id}', '${lecture.name}', '${lecture.points}');`)
+  db.run(
+    `INSERT or ignore INTO categories VALUES ('${lecture.id}', '${lecture.name}', '${lecture.points}', '${lecture.questionsToExam}');`
+  )
 
   // add category_types entry
   lecture.type.forEach((t) => {

@@ -26,7 +26,8 @@ db.run(`
   CREATE TABLE IF NOT EXISTS categories (
       id TEXT PRIMARY KEY,
       name TEXT NOT NULL,
-      points INTEGER NOT NULL
+      points INTEGER NOT NULL,
+      questions_to_exam INTEGER NOT NULL
   );
 `)
 
