@@ -22,20 +22,6 @@ const lectures = [
     questionsToExam: 4
   },
   {
-    name: 'Dopravní značky',
-    id: 14,
-    points: 1,
-    type: ['a', 'b', 'c', 'd'], // all
-    questionsToExam: 3
-  },
-  {
-    name: 'Řešení dopravních situací',
-    id: 17,
-    points: 4,
-    type: ['a', 'b', 'c', 'd'], // all
-    questionsToExam: 3
-  },
-  {
     name: 'Zásady bezpečné jízdy [A]',
     id: 23,
     points: 2,
@@ -57,16 +43,30 @@ const lectures = [
     questionsToExam: 4
   },
   {
-    name: 'Související předpisy',
-    id: 21,
-    points: 2,
+    name: 'Dopravní značky',
+    id: 14,
+    points: 1,
     type: ['a', 'b', 'c', 'd'], // all
-    questionsToExam: 2
+    questionsToExam: 3
+  },
+  {
+    name: 'Řešení dopravních situací',
+    id: 17,
+    points: 4,
+    type: ['a', 'b', 'c', 'd'], // all
+    questionsToExam: 3
   },
   {
     name: 'Podmínky provozu vozidel',
     id: 22,
     points: 1,
+    type: ['a', 'b', 'c', 'd'], // all
+    questionsToExam: 2
+  },
+  {
+    name: 'Související předpisy',
+    id: 21,
+    points: 2,
     type: ['a', 'b', 'c', 'd'], // all
     questionsToExam: 2
   },
