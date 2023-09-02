@@ -67,10 +67,10 @@ function downloadLecture(lecture, db) {
               let filePath = assets.length === 0 ? null : `'${assets[0].filename}'` // if there is no image write null
 
               db.run(
-                `INSERT or ignore INTO questions VALUES ('${questionId}', '${text}', ${filePath}, '${lecture.id}');`
+                `INSERT or ignore INTO questions VALUES ('${questionId}', '${text}', '${question.Code}', ${filePath}, '${lecture.id}');`
               )
 
-              answers.forEach(function (answer) {
+              answers.forEach(function(answer) {
                 // check if the current answer is in the correctAnswers array
                 let isCorrect = question.CorrectAnswers.includes(answer.id) ? 1 : 0
                 db.run(
@@ -94,7 +94,7 @@ function downloadLecture(lecture, db) {
     return serialResolve(questionPromises).then((questions) => {
       console.log(`Saving ${lecture.name} `)
       questions.sort((a, b) => a.code.localeCompare(b.code))
-      fs.writeFileSync(path.join(lectureDir, 'data.json'), JSON.stringify(questions, null, 2))
+      // fs.writeFileSync(path.join(lectureDir, 'data.json'), JSON.stringify(questions, null, 2))
     })
   })
 }

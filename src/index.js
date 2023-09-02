@@ -46,6 +46,7 @@ db.run(`
   CREATE TABLE IF NOT EXISTS questions (
       id TEXT PRIMARY KEY,
       text TEXT NOT NULL,
+      code TEXT NOT NULL,
       image_url TEXT,
       category_id TEXT NOT NULL,
       FOREIGN KEY (category_id) REFERENCES categories (id)
