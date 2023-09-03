@@ -1,4 +1,4 @@
-data
+#data
+#data.db
 node_modules
 .DS_Store
-data.db
