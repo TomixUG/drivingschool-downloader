@@ -22,21 +22,21 @@ const lectures = [
     questionsToExam: 4
   },
   {
-    name: 'Zásady bezpečné jízdy [A]',
+    name: 'Zásady bezpečné jízdy',
     id: 23,
     points: 2,
     type: ['a'],
     questionsToExam: 4
   },
   {
-    name: 'Zásady bezpečné jízdy [B]',
+    name: 'Zásady bezpečné jízdy',
     id: 19,
     points: 2,
     type: ['b'],
     questionsToExam: 4
   },
   {
-    name: 'Zásady bezpečné jízdy [C,D]',
+    name: 'Zásady bezpečné jízdy',
     id: 18,
     points: 2,
     type: ['c', 'd'],
