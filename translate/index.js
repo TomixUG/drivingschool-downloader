@@ -44,6 +44,8 @@ async function proccessQuestions(language) {
     var category_id = question.category_id
     var explanation = question.explanation
 
+    // FIXME: if image_url is null, it gets saved as 'null', but we need to save it as null
+
     const questionOtherLang = await db.all(`select id from questions_${language} where id = '${id}';`)
     if (questionOtherLang.length > 0) {
       console.log('skipping...')
