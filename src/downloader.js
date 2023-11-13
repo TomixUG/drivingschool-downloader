@@ -66,8 +66,9 @@ function downloadLecture(lecture, db) {
               // adding the lecture.id to make it unique, there can be the same qeuestion in different category
               let filePath = assets.length === 0 ? null : `'${assets[0].filename}'` // if there is no image write null
 
+              // FIXME: in case this fails in the future
               db.run(
-                `INSERT or ignore INTO questions VALUES ('${questionId}', '${text}', '${question.Code}', ${filePath}, '${lecture.id}');`
+                `INSERT or ignore INTO questions VALUES ('${questionId}', '${text}', '${question.Code}', ${filePath}, '${lecture.id}, NULL');`
               )
 
               answers.forEach(function(answer) {

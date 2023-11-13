@@ -49,6 +49,7 @@ db.run(`
       code TEXT NOT NULL,
       image_url TEXT,
       category_id TEXT NOT NULL,
+      explanation TEXT,
       FOREIGN KEY (category_id) REFERENCES categories (id)
   );
 `)
