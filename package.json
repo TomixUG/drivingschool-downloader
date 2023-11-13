@@ -4,14 +4,17 @@
   "license": "MIT",
   "scripts": {
     "start": "node src/index.js",
+    "translate": "node translate/index.js",
     "deploy": "node src/index.js && ./deploy.sh",
     "lint": "eslint src"
   },
   "dependencies": {
     "axios": "^0.21.2",
     "cheerio": "^1.0.0-rc.10",
+    "deepl-node": "^1.11.0",
     "fs-extra": "^10.0.0",
     "inquirer": "^8.1.2",
+    "sqlite": "^5.1.1",
     "sqlite3": "^5.1.6"
   },
   "devDependencies": {
