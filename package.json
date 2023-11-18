@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node src/index.js",
     "translate": "node translate/index.js",
+    "postgres": "node postgres/index.js",
     "deploy": "node src/index.js && ./deploy.sh",
     "lint": "eslint src"
   },
@@ -14,6 +15,7 @@
     "deepl-node": "^1.11.0",
     "fs-extra": "^10.0.0",
     "inquirer": "^8.1.2",
+    "postgres": "^3.4.3",
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.6"
   },
