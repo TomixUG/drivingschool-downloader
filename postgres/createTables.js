@@ -1,4 +1,9 @@
 module.exports = async function createPostgresTables(sql) {
+  console.log('creating schema')
+  await sql`
+      create schema if not exists data;
+  `
+
   console.log('creating users tables')
   await sql`
       CREATE TABLE IF NOT EXISTS auth_user (
@@ -24,17 +29,7 @@ module.exports = async function createPostgresTables(sql) {
     );
   `
 
-  await sql`
-      CREATE TABLE IF NOT EXISTS user_answers (
-        user_id TEXT NOT NULL,
-        question_id TEXT NOT NULL,
-        is_correct BOOLEAN,
-        flagged BOOLEAN NOT NULL default false,
-        FOREIGN KEY (user_id) REFERENCES auth_user(id),
-        FOREIGN KEY (question_id) REFERENCES data.questions(id),
-        PRIMARY KEY (user_id, question_id)
-    );
-  `
+
 
   //  INSERT INTO user_answers (user_id, question_id, is_correct)
   // VALUES ('dj5rnoqfq1sfvow','0606038624', false)
@@ -57,10 +52,6 @@ module.exports = async function createPostgresTables(sql) {
   //   where is_correct is not null AND data.category_types.type_id = 'b' and user_answers.user_id = 'dj5rnoqfq1sfvow'
   // ) as amount;
 
-  console.log('creating schema')
-  await sql`
-      create schema if not exists data;
-      `
 
   console.log('creating types')
   await sql`
@@ -95,6 +86,18 @@ module.exports = async function createPostgresTables(sql) {
         FOREIGN KEY (type_id) REFERENCES data.types (id)
     );
   `
+
+  await sql`
+  CREATE TABLE IF NOT EXISTS user_answers (
+    user_id TEXT NOT NULL,
+    question_id TEXT NOT NULL,
+    is_correct BOOLEAN,
+    flagged BOOLEAN NOT NULL default false,
+    FOREIGN KEY (user_id) REFERENCES auth_user(id),
+    FOREIGN KEY (question_id) REFERENCES data.questions(id),
+    PRIMARY KEY (user_id, question_id)
+);
+`
 }
 
 async function createCategories(sql, name) {
