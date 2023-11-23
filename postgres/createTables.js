@@ -1,4 +1,62 @@
 module.exports = async function createPostgresTables(sql) {
+  console.log('creating users tables')
+  await sql`
+      CREATE TABLE IF NOT EXISTS auth_user (
+        id TEXT NOT NULL PRIMARY KEY,
+        email TEXT NOT NULL,
+        firstname TEXT,
+        lastname TEXT
+    );
+  `
+  await sql`
+      CREATE TABLE IF NOT EXISTS user_key (
+        id TEXT NOT NULL PRIMARY KEY,
+        user_id TEXT NOT NULL REFERENCES auth_user(id),
+        hashed_password TEXT
+    );
+  `
+  await sql`
+      CREATE TABLE IF NOT EXISTS user_session (
+        id TEXT NOT NULL PRIMARY KEY,
+        user_id TEXT NOT NULL REFERENCES auth_user(id),
+        active_expires BIGINT NOT NULL,
+        idle_expires BIGINT NOT NULL
+    );
+  `
+
+  await sql`
+      CREATE TABLE IF NOT EXISTS user_answers (
+        user_id TEXT NOT NULL,
+        question_id TEXT NOT NULL,
+        is_correct BOOLEAN,
+        flagged BOOLEAN NOT NULL default false,
+        FOREIGN KEY (user_id) REFERENCES auth_user(id),
+        FOREIGN KEY (question_id) REFERENCES data.questions(id),
+        PRIMARY KEY (user_id, question_id)
+    );
+  `
+
+  //  INSERT INTO user_answers (user_id, question_id, is_correct)
+  // VALUES ('dj5rnoqfq1sfvow','0606038624', false)
+  // ON CONFLICT (user_id, question_id) DO UPDATE SET
+  // is_correct = false;
+
+  // total success rate:
+  //  select CAST(
+  // (
+  //   select count(*) from user_answers
+  //   join data.questions as questions on (user_answers.question_id = questions.id)
+  //   join data.category_types on (questions.category_id = data.category_types.category_id)
+  //   where is_correct = 't' AND data.category_types.type_id = 'b' and user_answers.user_id = 'dj5rnoqfq1sfvow'
+  // ) as REAL)
+  // /
+  // (
+  //   select count(*) from user_answers
+  //   join data.questions as questions on (user_answers.question_id = questions.id)
+  //   join data.category_types on (questions.category_id = data.category_types.category_id)
+  //   where is_correct is not null AND data.category_types.type_id = 'b' and user_answers.user_id = 'dj5rnoqfq1sfvow'
+  // ) as amount;
+
   console.log('creating schema')
   await sql`
       create schema if not exists data;
