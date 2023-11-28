@@ -97,7 +97,7 @@ module.exports = async function createPostgresTables(sql) {
 `
 
   await sql`
-  CREATE TABLE user_settings (
+  CREATE TABLE IF NOT EXISTS user_settings (
     user_id TEXT,
     value JSONB,
     PRIMARY KEY (user_id),
