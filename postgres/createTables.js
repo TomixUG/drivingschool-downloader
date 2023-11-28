@@ -29,8 +29,6 @@ module.exports = async function createPostgresTables(sql) {
     );
   `
 
-
-
   //  INSERT INTO user_answers (user_id, question_id, is_correct)
   // VALUES ('dj5rnoqfq1sfvow','0606038624', false)
   // ON CONFLICT (user_id, question_id) DO UPDATE SET
@@ -51,7 +49,6 @@ module.exports = async function createPostgresTables(sql) {
   //   join data.category_types on (questions.category_id = data.category_types.category_id)
   //   where is_correct is not null AND data.category_types.type_id = 'b' and user_answers.user_id = 'dj5rnoqfq1sfvow'
   // ) as amount;
-
 
   console.log('creating types')
   await sql`
@@ -98,6 +95,15 @@ module.exports = async function createPostgresTables(sql) {
     PRIMARY KEY (user_id, question_id)
 );
 `
+
+  await sql`
+  CREATE TABLE user_settings (
+    user_id TEXT,
+    value JSONB,
+    PRIMARY KEY (user_id),
+    FOREIGN KEY (user_id) REFERENCES auth_user(id)
+  );
+  `
 }
 
 async function createCategories(sql, name) {
