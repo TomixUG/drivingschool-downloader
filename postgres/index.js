@@ -100,6 +100,7 @@ async function syncCategories(sql, sqlitedb, lang) {
     var name = row.name
     var points = row.points
     var questions_to_exam = row.questions_to_exam
+    var category_order = row.category_order
 
     const exists = await sql.unsafe(`select id from data.categories${lang} where id = '${id}';`)
     if (exists.length > 0) {
@@ -111,7 +112,7 @@ async function syncCategories(sql, sqlitedb, lang) {
     console.log(`category (${id}) does not exist, creating...`)
 
     await sql.unsafe(
-      `INSERT INTO data.categories${lang} VALUES (${id}, $1, ${points}, ${questions_to_exam}) on conflict (id) do nothing;`,
+      `INSERT INTO data.categories${lang} VALUES (${id}, $1, ${points}, ${questions_to_exam}, ${category_order}) on conflict (id) do nothing;`,
       [name]
     )
   }

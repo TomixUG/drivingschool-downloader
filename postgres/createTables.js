@@ -114,7 +114,7 @@ async function createCategories(sql, name) {
         name TEXT NOT NULL,
         points INTEGER NOT NULL,
         questions_to_exam INTEGER NOT NULL,
-        order INTEGER NOT NULL
+        category_order INTEGER NOT NULL
     );
   `)
 }
