@@ -22,7 +22,7 @@ function downloadLecture(lecture, db) {
 
   // add category entry
   db.run(
-    `INSERT or ignore INTO categories VALUES ('${lecture.id}', '${lecture.name}', '${lecture.points}', '${lecture.questionsToExam}');`
+    `INSERT or ignore INTO categories VALUES ('${lecture.id}', '${lecture.name}', '${lecture.points}', '${lecture.questionsToExam}', '${lecture.categoryOrder}');`
   )
 
   // add category_types entry
@@ -71,7 +71,7 @@ function downloadLecture(lecture, db) {
                 `INSERT or ignore INTO questions VALUES ('${questionId}', '${text}', '${question.Code}', ${filePath}, '${lecture.id}, NULL');`
               )
 
-              answers.forEach(function(answer) {
+              answers.forEach(function (answer) {
                 // check if the current answer is in the correctAnswers array
                 let isCorrect = question.CorrectAnswers.includes(answer.id) ? 1 : 0
                 db.run(
