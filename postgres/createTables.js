@@ -104,6 +104,27 @@ module.exports = async function createPostgresTables(sql) {
     FOREIGN KEY (user_id) REFERENCES auth_user(id)
   );
   `
+
+  // exams
+  await sql`
+  CREATE TABLE IF NOT EXISTS exams (
+      id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+      user_id TEXT NOT NULL REFERENCES auth_user(id),
+      date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      duration integer NOT NULL,
+      points integer NOT NULL,
+      correct_questions integer NOT NULL,
+      type text NOT NULL references data.types(id)   
+  )
+  `
+  await sql`
+    CREATE TABLE IF NOT EXISTS exam_answers (
+      exam_id uuid NOT NULL REFERENCES exams(id),
+      question_id TEXT NOT NULL REFERENCES data.questions(id),
+      answer_id TEXT NOT NULL REFERENCES data.answers(id),
+      correct BOOLEAN NOT NULL
+  );
+  `
 }
 
 async function createCategories(sql, name) {
