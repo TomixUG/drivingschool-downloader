@@ -121,7 +121,7 @@ module.exports = async function createPostgresTables(sql) {
     CREATE TABLE IF NOT EXISTS exam_answers (
       exam_id uuid NOT NULL REFERENCES exams(id),
       question_id TEXT NOT NULL REFERENCES data.questions(id),
-      answer_id TEXT NOT NULL REFERENCES data.answers(id),
+      answer_id TEXT REFERENCES data.answers(id),
       correct BOOLEAN NOT NULL
   );
   `
