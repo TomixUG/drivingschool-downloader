@@ -119,7 +119,7 @@ module.exports = async function createPostgresTables(sql) {
   `
   await sql`
     CREATE TABLE IF NOT EXISTS exam_answers (
-      exam_id uuid NOT NULL REFERENCES exams(id),
+      exam_id uuid NOT NULL REFERENCES exams(id) ON DELETE CASCADE,
       question_id TEXT NOT NULL REFERENCES data.questions(id),
       answer_id TEXT REFERENCES data.answers(id)
   );
