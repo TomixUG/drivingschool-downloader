@@ -124,6 +124,13 @@ module.exports = async function createPostgresTables(sql) {
       answer_id TEXT REFERENCES data.answers(id)
   );
   `
+
+  await sql`
+        CREATE TABLE IF NOT EXISTS password_reset_token (
+        id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+        user_id TEXT NOT NULL REFERENCES auth_user(id),
+        expires date
+  );`
 }
 
 async function createCategories(sql, name) {
