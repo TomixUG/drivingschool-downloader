@@ -110,7 +110,7 @@ module.exports = async function createPostgresTables(sql) {
   await sql`
   CREATE TABLE IF NOT EXISTS exams (
       id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-      user_id TEXT NOT NULL REFERENCES auth_user(id),
+      user_id TEXT REFERENCES auth_user(id),
       date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
       duration integer NOT NULL,
       points integer NOT NULL,
