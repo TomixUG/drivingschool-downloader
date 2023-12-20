@@ -134,10 +134,18 @@ module.exports = async function createPostgresTables(sql) {
   );`
 
   await sql`
+  CREATE TABLE IF NOT EXISTS promo_codes (
+    id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+    creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  );`
+
+  await sql`
   CREATE TABLE IF NOT EXISTS payment (
     id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-    order_id TEXT NOT NULL,
     user_id TEXT NOT NULL REFERENCES auth_user(id),
+    order_id TEXT,
+    redeem_id UUID references promo_codes(id),
+    order_type TEXT NOT NULL check (order_type in ('purchase', 'redeem')),
     payment_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     status BOOLEAN NOT NULL DEFAULT 't'
   );`
