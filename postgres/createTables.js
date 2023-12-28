@@ -11,6 +11,7 @@ module.exports = async function createPostgresTables(sql) {
         email TEXT NOT NULL,
         firstname TEXT,
         lastname TEXT,
+        is_admin BOOLEAN NOT NULL DEFAULT 'f',
         is_premium BOOLEAN NOT NULL DEFAULT 'f'
     );
   `
