@@ -150,6 +150,14 @@ module.exports = async function createPostgresTables(sql) {
     payment_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     status BOOLEAN NOT NULL DEFAULT 't'
   );`
+
+  await sql`
+  CREATE TABLE IF NOT EXISTS email_change_token (
+    id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id TEXT NOT NULL REFERENCES auth_user(id),
+    new_email TEXT NOT NULL,
+    expires date NOT NULL
+  );`
 }
 
 async function createCategories(sql, name) {
