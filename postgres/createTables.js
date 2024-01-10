@@ -5,6 +5,16 @@ module.exports = async function createPostgresTables(sql) {
   `
 
   console.log('creating users tables')
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS auth_types (
+      id TEXT PRIMARY KEY
+    );
+  `
+
+  await sql`INSERT INTO auth_types(id) values ('password') on conflict (id) do nothing;`
+  await sql`INSERT INTO auth_types(id) values ('google') on conflict (id) do nothing;`
+
   await sql`
       CREATE TABLE IF NOT EXISTS auth_user (
         id TEXT NOT NULL PRIMARY KEY,
@@ -12,9 +22,12 @@ module.exports = async function createPostgresTables(sql) {
         firstname TEXT,
         lastname TEXT,
         is_admin BOOLEAN NOT NULL DEFAULT 'f',
-        is_premium BOOLEAN NOT NULL DEFAULT 'f'
+        is_premium BOOLEAN NOT NULL DEFAULT 'f',
+        profile_photo TEXT,
+        auth_type TEXT NOT NULL DEFAULT 'password' REFERENCES auth_types(id)
     );
   `
+
   await sql`
       CREATE TABLE IF NOT EXISTS user_key (
         id TEXT NOT NULL PRIMARY KEY,
